@@ -44,6 +44,10 @@
       border-radius: 50%;
       overflow: hidden;
       box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    .logo:hover {
+      transform: scale(1.1);
     }
     .logo img {
       width: 100%;
@@ -51,6 +55,7 @@
       object-fit: cover;
     }
     h1 { font-size: 28px; margin-bottom: 8px; }
+    .subtitle { font-weight: 300; font-size: 16px; opacity: 0.95; }
     .content { padding: 30px; }
     .instruction {
       background: #e3f2fd;
@@ -60,24 +65,40 @@
       border-left: 5px solid #2196f3;
       font-size: 16px;
     }
-
-    input {
-      width: 100%;
-      padding: 12px;
-      border-radius: 8px;
-      border: 1px solid #aaa;
-      margin: 10px 0 16px;
-      font-size: 16px;
-    }
-
     .question {
       background: #f9f9f9;
       padding: 18px;
       border-radius: 12px;
       margin-bottom: 16px;
       border-left: 5px solid #7209b7;
+      transition: all 0.3s;
     }
-    .question label { display: block; margin-bottom: 8px; }
+    .question:hover { background: #f1f8ff; transform: translateX(5px); }
+    .question label {
+      font-size: 17px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+    .options {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .options label {
+      font-weight: normal;
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    input[type="radio"] {
+      width: 20px;
+      height: 20px;
+      margin-right: 10px;
+      accent-color: #7209b7;
+    }
     button {
       width: 100%;
       padding: 16px;
@@ -89,8 +110,12 @@
       font-weight: 600;
       cursor: pointer;
       margin-top: 20px;
+      transition: 0.3s;
     }
-
+    button:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 10px 20px rgba(114, 9, 183, 0.3);
+    }
     .result {
       margin-top: 30px;
       padding: 25px;
@@ -99,30 +124,35 @@
       font-size: 18px;
       display: none;
     }
-    .low { background: #d4edda; }
-    .moderate { background: #fff3cd; }
-    .high { background: #f8d7da; }
-
+    .low { background: #d4edda; border: 2px solid #c3e6cb; color: #155724; }
+    .moderate { background: #fff3cd; border: 2px solid #ffeaa7; color: #856404; }
+    .high { background: #f8d7da; border: 2px solid #f5c6cb; color: #721c24; }
+    .score { font-size: 36px; font-weight: bold; margin: 10px 0; }
+    @media (max-width: 600px) {
+      .options { gap: 20px; }
+      h1 { font-size: 24px; }
+      .content { padding: 20px; }
+      .logo { position: static; margin: 0 auto 10px; display: block; }
+    }
   </style>
 </head>
 <body>
   <div class="container">
     <header>
       <div class="logo">
-        <img src="https://via.placeholder.com/60x60/0077b6/ffffff?text=DG">
+        <img src="https://raw.githubusercontent.com/ggg35gkuy/logo.png/refs/heads/main/20251201_100940.png" alt="Doctor ก็อต Logo" onerror="this.src='https://via.placeholder.com/60x60/0077b6/ffffff?text=DG'; this.alt='Logo ไม่พบ'">
       </div>
       <h1>แบบคัดกรองปัญหาการใช้สารเสพติด</h1>
+      <p class="subtitle">เว็บนี้สร้างโดย Doctor ก็อต</p>
     </header>
 
     <div class="content">
+      <div class="instruction">
+        <strong>คำแนะนำ:</strong> โปรดตอบคำถามทั้ง 10 ข้อ โดยอ้างอิงพฤติกรรมการใช้สารเสพติดในช่วง <strong>12 เดือนที่ผ่านมา</strong> เท่านั้น<br>
+        <small>(หากไม่เคยใช้สารเสพติดเลย ให้ตอบ "ไม่ใช่" ทุกข้อ ยกเว้นข้อ 3 ให้ตอบ "ใช่")</small>
+      </div>
+
       <form id="surveyForm">
-        <label>ชื่อผู้ส่ง</label>
-        <input type="text" name="name" required placeholder="กรอกชื่อของคุณ">
-
-        <div class="instruction">
-          โปรดตอบคำถามทั้ง 10 ข้อ โดยอ้างอิงพฤติกรรมใน 12 เดือนที่ผ่านมา
-        </div>
-
         <div id="questions"></div>
         <button type="submit">ดูผลการประเมิน</button>
       </form>
@@ -133,16 +163,16 @@
 
   <script>
     const questions = [
-      "1. คุณเคยใช้ยาเสพติดมากกว่าที่แพทย์สั่งหรือไม่?",
-      "2. คุณเคยใช้สารเสพติดมากกว่าหนึ่งชนิดในวันเดียวกันหรือไม่?",
-      "3. คุณสามารถเลิกได้เมื่อต้องการหรือไม่?",
-      "4. คุณเคยเกิดอาการ Blackouts หรือ Flashbacks หรือไม่?",
-      "5. คุณเคยรู้สึกผิดหรือสำนึกผิดหลังใช้สารหรือไม่?",
-      "6. คู่สมรส ครอบครัว หรือเพื่อนเคยบ่นหรือกังวลเรื่องการใช้สารของคุณหรือไม่?",
+      "1. คุณเคยใช้ยาเสพติดมากกว่าที่แพทย์สั่ง หรือใช้เพื่อเหตุผลนอกเหนือจากทางการแพทย์หรือไม่?",
+      "2. คุณเคยใช้สารเสพติดมากกว่าหนึ่งชนิดในวันเดียวกันหรือไม่? (เช่น กัญชา+ยาบ้า+แอลกอฮอล์)",
+      "3. คุณสามารถเลิกใช้สารเสพติดได้เมื่อต้องการหรือไม่? (ถ้าไม่เคยใช้เลย ให้ตอบ “ใช่”)",
+      "4. คุณเคยเกิดอาการ Blackouts (ความจำขาดหาย) หรือ Flashbacks จากการใช้สารหรือไม่?",
+      "5. คุณเคยรู้สึกผิด รู้สึกแย่ หรือสำนึกผิดหลังจากใช้สารเสพติดหรือไม่?",
+      "6. คู่สมรส ครอบครัว หรือเพื่อนเคยบ่นหรือกังวลเรื่องการใช้สารเสพติดของคุณหรือไม่?",
       "7. คุณเคยละเลยหน้าที่ในครอบครัวหรือความรับผิดชอบเพราะการใช้สารหรือไม่?",
-      "8. คุณเคยทำสิ่งผิดกฎหมายเพื่อให้ได้มาซึ่งสารหรือไม่?",
-      "9. คุณเคยมีอาการถอนยาเมื่อหยุดใช้หรือไม่?",
-      "10. คุณเคยมีปัญหาสุขภาพที่เกี่ยวข้องกับการใช้สารหรือไม่?"
+      "8. คุณเคยทำสิ่งผิดกฎหมายเพื่อให้ได้มาซึ่งสารเสพติดหรือไม่? (เช่น ขโมย ลักเล็กขโมยน้อย)",
+      "9. คุณเคยมีอาการถอนยาเมื่อหยุดใช้สารหรือไม่? (เช่น มือสั่น กระสับกระส่าย นอนไม่หลับ ปวดเมื่อย)",
+      "10. คุณเคยมีปัญหาสุขภาพที่เกี่ยวข้องกับการใช้สารเสพติดหรือไม่? (เช่น ตับอักเสบ ไซนัสอักเสบ โรคจิตจากการใช้ยา)"
     ];
 
     const questionsDiv = document.getElementById("questions");
@@ -152,43 +182,65 @@
       block.className = "question";
       block.innerHTML = `
         <label>${q}</label>
-        <label><input type="radio" name="q${i}" value="1" required> ใช่</label>
-        <label><input type="radio" name="q${i}" value="0" required> ไม่ใช่</label>
+        <div class="options">
+          <label><input type="radio" name="q${i}" value="1" required> ใช่</label>
+          <label><input type="radio" name="q${i}" value="0" required> ไม่ใช่</label>
+        </div>
       `;
       questionsDiv.appendChild(block);
     });
 
-    document.getElementById("surveyForm").addEventListener("submit", async function(e) {
+    document.getElementById("surveyForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
       let score = 0;
+      let allAnswered = true;
+
       for (let i = 0; i < 10; i++) {
         const selected = document.querySelector(`input[name="q${i}"]:checked`);
-        if (!selected) return alert("กรุณาตอบทุกข้อ");
-        if (i === 2) { score += selected.value === "0" ? 1 : 0; } // ข้อ 3 ตรงข้าม
-        else { score += parseInt(selected.value); }
+        if (!selected) {
+          allAnswered = false;
+          break;
+        }
+        // ข้อ 3 ตอบ "ไม่ใช่" = 1 คะแนน, ตอบ "ใช่" = 0 คะแนน
+        if (i === 2) { // ข้อ 3
+          score += selected.value === "0" ? 1 : 0;
+        } else {
+          score += parseInt(selected.value);
+        }
       }
 
-      let level = score <= 2 ? "ต่ำ" : score <= 5 ? "ปานกลาง" : "สูง";
+      if (!allAnswered) {
+        alert("⚠️ กรุณาตอบคำถามให้ครบทุกข้อครับ");
+        return;
+      }
+
+      let level = "";
+      let recommendation = "";
+
+      if (score <= 2) {
+        level = "ความเสี่ยงต่ำ";
+        recommendation = "คุณอยู่ในกลุ่มความเสี่ยงต่ำ แต่ควรหลีกเลี่ยงการใช้สารเสพติดทุกชนิดต่อไป";
+        document.getElementById("result").className = "result low";
+      } else if (score <= 5) {
+        level = "ความเสี่ยงปานกลาง";
+        recommendation = "คุณอยู่ในระดับความเสี่ยงปานกลาง ควรได้รับคำปรึกษาและการดูแลอย่างใกล้ชิด<br>แนะนำให้พบนักจิตวิทยา หรือศูนย์บำบัดใกล้บ้าน";
+        document.getElementById("result").className = "result moderate";
+      } else {
+        level = "ความเสี่ยงสูง – อาจเข้าข่ายติดสารเสพติด";
+        recommendation = "คุณอยู่ในระดับความเสี่ยงสูงมาก<br><strong>แนะนำให้รีบพบแพทย์หรือผู้เชี่ยวชาญด้านยาเสพติดโดยด่วน</strong><br>สามารถติดต่อสายด่วน 1165 หรือโรงพยาบาลใกล้บ้านได้ทันที";
+        document.getElementById("result").className = "result high";
+      }
 
       const resultBox = document.getElementById("result");
       resultBox.style.display = "block";
-      resultBox.className = "result " + (level==="ต่ำ" ? "low" : level==="ปานกลาง" ? "moderate" : "high");
       resultBox.innerHTML = `
-        <h2>คะแนนของคุณ: ${score}</h2>
-        <p>ระดับความเสี่ยง: <strong>${level}</strong></p>
+        <div class="score">${score}</div>
+        <p><strong>ระดับความเสี่ยง:</strong> ${level}</p>
+        <p>${recommendation}</p>
+        <small>หมายเหตุ: แบบประเมินนี้เป็นเพียงการคัดกรองเบื้องต้น ไม่สามารถใช้แทนการวินิจฉัยจากแพทย์ได้</small>
       `;
-
-      // ส่งข้อมูลไป Formspree
-      await fetch("https://formspree.io/f/mqarqprr", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name: document.querySelector("input[name='name']").value,
-          score: score,
-          risk: level
-        })
-      });
+      resultBox.scrollIntoView({ behavior: "smooth" });
     });
   </script>
 </body>
