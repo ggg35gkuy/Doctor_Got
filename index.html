@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>แบบคัดกรองปัญหาการใช้สารเสพติด (!)</title>
+  <title>แบบคัดกรองปัญหาการใช้สารเสพติด (DAST-10 + ทัศนคติ)</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600&display=swap" rel="stylesheet">
   <style>
     * { font-family: "Prompt", sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
@@ -17,10 +17,10 @@
     .container {
       background: white;
       width: 100%;
-      max-width: 720px;
+      max-width: 750px;
       margin: 20px auto;
       border-radius: 20px;
-      box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+      box-shadow: 0 15px 35px rgba(0,0,0,0.15);
       overflow: hidden;
       animation: fadeIn 0.8s ease-out;
     }
@@ -32,9 +32,242 @@
       background: linear-gradient(135deg, #0077b6, #00b4d8);
       color: white;
       text-align: center;
-      padding: 30px 20px;
+      padding: 35px 20px;
       position: relative;
     }
+    .logo {
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      width: 65px;
+      height: 65px;
+      border-radius: 50%;
+      overflow: hidden;
+      box-shadow: 0 4px 15px rgba(0,0,0,0.3);
+      border: 3px solid white;
+    }
+    .logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+    h1 { font-size: 28px; margin-bottom: 8px; }
+    .subtitle { font-size: 17px; opacity: 0.95; }
+    .content { padding: 30px; }
+    .section-title {
+      background: linear-gradient(90deg, #7209b7, #480ca8);
+      color: white;
+      padding: 12px 18px;
+      border-radius: 10px;
+      font-size: 18px;
+      font-weight: 600;
+      margin: 25px 0 15px;
+      text-align: center;
+    }
+    .instruction {
+      background: #f3e5f5;
+      padding: 16px;
+      border-radius: 12px;
+      margin-bottom: 20px;
+      border-left: 6px solid #7209b7;
+      font-size: 16px;
+      line-height: 1.7;
+    }
+    .question {
+      background: #fdfaff;
+      padding: 18px;
+      border-radius: 12px;
+      margin-bottom: 16px;
+      border-left: 5px solid #7209b7;
+      transition: all 0.3s;
+    }
+    .question:hover { background: #f8f4ff; transform: translateX(5px); }
+    .question label {
+      font-size: 17px;
+      font-weight: 500;
+      display: block;
+      margin-bottom: 12px;
+      color: #1a1a1a;
+    }
+    .options {
+      display: flex;
+      gap: 35px;
+      flex-wrap: wrap;
+    }
+    .options label {
+      font-size: 16px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+    }
+    input[type="radio"] {
+      width: 22px;
+      height: 22px;
+      margin-right: 10px;
+      accent-color: #7209b7;
+    }
+    button {
+      width: 100%;
+      padding: 18px;
+      background: linear-gradient(135deg, #7209b7, #480ca8);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 19px;
+      font-weight: 600;
+      cursor: pointer;
+      margin-top: 25px;
+      transition: 0.3s;
+    }
+    button:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 12px 25px rgba(114, 9, 183, 0.4);
+    }
+    .result {
+      margin-top: 35px;
+      padding: 28px;
+      border-radius: 15px;
+      text-align: center;
+      font-size: 19px;
+      display: none;
+    }
+    .low { background: #d4edda; border: 3px solid #c3e6cb; color: #155724; }
+    .moderate { background: #fff3cd; border: 3px solid #ffeaa7; color: #856404; }
+    .high { background: #f8d7da; border: 3px solid #f5c6cb; color: #721c24; }
+    .score { font-size: 42px; font-weight: bold; margin: 15px 0; }
+    @media (max-width: 600px) {
+      .content { padding: 20px; }
+      .options { gap: 20px; justify-content: center; }
+      .logo { position: static; margin: 0 auto 15px; display: block; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">
+        <img src="https://raw.githubusercontent.com/ggg35gkuy/logo.png/refs/heads/main/20251201_100940.png" alt="โลโก้" onerror="this.src='https://via.placeholder.com/65/7209b7/ffffff?text=โลโก้'">
+      </div>
+      <h1>แบบคัดกรองปัญหาการใช้สารเสพติด</h1>
+      <p class="subtitle">แบบประเมิน 20 ข้อ (DAST-10 + ทัศนคติและพฤติกรรมเสี่ยง)</p>
+      <p class="subtitle">โดย Anucha</p>
+    </header>
+
+    <div class="content">
+      <div class="instruction">
+        <strong>คำแนะนำ:</strong> โปรดตอบตามความจริงในช่วง <strong>12 เดือนที่ผ่านมา</strong><br>
+        <small>• หากไม่เคยใช้สารเสพติดเลย → ตอบ "ไม่ใช่" ทุกข้อ ยกเว้นข้อ 3 ตอบ "ใช่"<br>
+        • คำถามข้อ 1–10 เป็น DAST-10 มาตรฐานสากล<br>
+        • ข้อ 11–20 เป็นการประเมินทัศนคติและความเสี่ยงเพิ่มเติม</small>
+      </div>
+
+      <div class="section-title">ส่วนที่ 1: พฤติกรรมการใช้สารเสพติด (DAST-10)</div>
+      <form id="surveyForm">
+        <div id="questions"></div>
+        <button type="submit">ดูผลการประเมินทันที</button>
+      </form>
+
+      <div id="result" class="result"></div>
+    </div>
+  </div>
+
+  <script>
+    const questions = [
+      // ส่วนที่ 1: DAST-10 (ข้อ 1–10)
+      "1. คุณเคยใช้ยาเสพติดมากกว่าที่แพทย์สั่ง หรือใช้เพื่อเหตุผลนอกเหนือจากทางการแพทย์หรือไม่?",
+      "2. คุณเคยใช้สารเสพติดมากกว่าหนึ่งชนิดในวันเดียวกันหรือไม่? (เช่น กัญชา+ยาบ้า+แอลกอฮอล์)",
+      "3. คุณสามารถเลิกใช้สารเสพติดได้เมื่อต้องการหรือไม่? (ถ้าไม่เคยใช้เลย ให้ตอบ “ใช่”)",
+      "4. คุณเคยเกิดอาการ Blackouts (ความจำขาดหาย) หรือ Flashbacks จากการใช้สารหรือไม่?",
+      "5. คุณเคยรู้สึกผิด รู้สึกแย่ หรือสำนึกผิดหลังจากใช้สารเสพติดหรือไม่?",
+      "6. คู่สมรส ครอบครัว หรือเพื่อนเคยบ่นหรือกังวลเรื่องการใช้สารเสพติดของคุณหรือไม่?",
+      "7. คุณเคยละเลยหน้าที่ในครอบครัวหรือความรับผิดชอบเพราะการใช้สารหรือไม่?",
+      "8. คุณเคยทำสิ่งผิดกฎหมายเพื่อให้ได้มาซึ่งสารเสพติดหรือไม่?",
+      "9. คุณเคยมีอาการถอนยาเมื่อหยุดใช้สารหรือไม่? (เช่น มือสั่น กระสับกระส่าย)",
+      "10. คุณเคยมีปัญหาสุขภาพที่เกี่ยวข้องกับการใช้สารเสพติดหรือไม่?",
+      
+      // ส่วนที่ 2: ทัศนคติและพฤติกรรมเสี่ยง (ข้อ 11–20)
+      "11. คุณคิดว่าสารเสพติดช่วยให้ผ่อนคลายหรือมีความสุขมากขึ้นหรือไม่?",
+      "12. คุณเคยใช้สารเสพติดเพราะเพื่อนชวน หรือเพื่อเข้ากลุ่มหรือไม่?",
+      "13. คุณเคยใช้สารเสพติดเพื่อแก้ปัญหาทางอารมณ์หรือความเครียดหรือไม่?",
+      "14. คุณเชื่อว่าตัวเองสามารถควบคุมการใช้สารเสพติดได้หรือไม่?",
+      "15. คุณคิดว่าการลองใช้สารเสพติด “เป็นเรื่องธรรมดา” ของวัยรุ่นหรือไม่?",
+      "16. คุณเคยอยู่ในกลุ่มเพื่อนหรือสถานที่ที่ใช้สารเสพติดเป็นประจำหรือไม่?",
+      "17. คุณเคยใช้สารเสพติดเพื่อหนีปัญหาในชีวิตหรือไม่?",
+      "18. คุณเคยมีปัญหาความสัมพันธ์กับคนรอบข้างเพราะเรื่องสารเสพติดหรือไม่?",
+      "19. คุณคิดว่าการใช้สารเสพติดยัง “ไม่เป็นปัญหาใหญ่” หรือไม่?",
+      "20. คุณเคยคิดจะลดหรือเลิกใช้สารเสพติดเพราะเหตุผลด้านสุขภาพหรือครอบครัวหรือไม่?"
+    ];
+
+    const questionsDiv = document.getElementById("questions");
+
+    questions.forEach((q, i) => {
+      const block = document.createElement("div");
+      block.className = "question";
+      block.innerHTML = `
+        <label>${q}</label>
+        <div class="options">
+          <label><input type="radio" name="q${i}" value="1" required> ใช่</label>
+          <label><input type="radio" name="q${i}" value="0" required> ไม่ใช่</label>
+        </div>
+      `;
+      questionsDiv.appendChild(block);
+    });
+
+    document.getElementById("surveyForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+
+      let score = 0;
+      let allAnswered = true;
+
+      for (let i = 0; i < 20; i++) {
+        const selected = document.querySelector(`input[name="q${i}"]:checked`);
+        if (!selected) {
+          allAnswered = false;
+          break;
+        }
+        // ข้อ 3 และ ข้อ 20 = ตอบ "ใช่" = 0 คะแนน (พฤติกรรมดี), ตอบ "ไม่ใช่" = 1 คะแนน (เสี่ยง)
+        if (i === 2 || i === 19) { // ข้อ 3 และ ข้อ 20
+          score += selected.value === "0" ? 1 : 0;
+        } else {
+          score += parseInt(selected.value); // ใช่ = 1, ไม่ใช่ = 0
+        }
+      }
+
+      if (!allAnswered) {
+        alert("กรุณาตอบคำถามให้ครบทั้ง 20 ข้อครับ");
+        return;
+      }
+
+      let level = "", recommendation = "";
+
+      if (score <= 7) {
+        level = "ความเสี่ยงต่ำ";
+        recommendation = "คุณอยู่ในกลุ่มความเสี่ยงต่ำ<br>แต่ควรหลีกเลี่ยงการใช้สารเสพติดทุกชนิดต่อไป";
+        document.getElementById("result").className = "result low";
+      } else if (score <= 13) {
+        level = "ความเสี่ยงปานกลาง";
+        recommendation = "คุณมีความเสี่ยงปานกลาง<br>แนะนำให้ปรึกษานักจิตวิทยาหรือผู้เชี่ยวชาญโดยเร็ว";
+        document.getElementById("result").className = "result moderate";
+      } else {
+        level = "ความเสี่ยงสูงมาก";
+        recommendation = "<strong>คุณอยู่ในระดับความเสี่ยงสูงมาก</strong><br>ควรพบแพทย์หรือผู้เชี่ยวชาญด้านยาเสพติดทันที<br>โทรสายด่วน 1165 หรือโรงพยาบาลใกล้บ้านได้เลยครับ";
+        document.getElementById("result").className = "result high";
+      }
+
+      const resultBox = document.getElementById("result");
+      resultBox.style.display = "block";
+      resultBox.innerHTML = `
+        <div class="score">${score} / 20</div>
+        <p><strong>ระดับความเสี่ยง:</strong> ${level}</p>
+        <p>${recommendation}</p>
+        <br>
+        <small><strong>หมายเหตุ:</strong> แบบประเมินนี้เป็นการคัดกรองเบื้องต้น<br>ไม่สามารถใช้แทนการวินิจฉัยจากแพทย์ได้</small>
+      `;
+      resultBox.scrollIntoView({ behavior: "smooth" });
+    });
+  </script>
+</body>
+</html>    }
     .logo {
       position: absolute;
       top: 10px;
