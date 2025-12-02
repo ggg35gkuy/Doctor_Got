@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>แบบคัดกรองการใช้สารเสพติด 50 ข้อ (ฉบับสมบูรณ์)</title>
+  <title>แบบคัดกรองการใช้สารเสพติด 50 ข้อ (ฉบับสมบูรณ์ + ปุ่มด่วน)</title>
   <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <style>
     * { font-family: "Prompt", sans-serif; box-sizing: border-box; margin: 0; padding: 0; }
@@ -41,6 +41,29 @@
     .logo img { width: 100%; height: 100%; object-fit: cover; }
     h1 { font-size: 30px; margin-bottom: 10px; }
     .subtitle { font-size: 18px; opacity: 0.95; }
+
+    /* ปุ่มด่วนสีเขียว */
+    .quick-btn {
+      background: linear-gradient(135deg, #28a745, #20c997);
+      color: white;
+      padding: 18px 25px;
+      font-size: 20px;
+      font-weight: 700;
+      border: none;
+      border-radius: 15px;
+      cursor: pointer;
+      display: block;
+      width: 90%;
+      max-width: 600px;
+      margin: 25px auto;
+      box-shadow: 0 10px 25px rgba(40,167,69,0.4);
+      transition: all 0.3s;
+    }
+    .quick-btn:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 15px 35px rgba(40,167,69,0.5);
+    }
+
     .content { padding: 35px; }
     .section {
       background: linear-gradient(90deg, #7209b7, #480ca8);
@@ -116,12 +139,14 @@
     .high { border-color: #dc3545; background: #f8d7da; color: #721c24; }
     .score { font-size: 48px; font-weight: bold; margin: 15px 0; }
     .name-input {
-      margin-bottom: 25px;
+      margin: 25px auto;
       padding: 15px;
       font-size: 18px;
-      width: 100%;
+      width: 90%;
+      max-width: 600px;
       border: 2px solid #7209b7;
       border-radius: 10px;
+      display: block;
     }
     @media (max-width: 600px) {
       .content { padding: 20px; }
@@ -137,17 +162,21 @@
         <img src="https://raw.githubusercontent.com/ggg35gkuy/logo.png/refs/heads/main/20251201_100940.png" alt="โลโก้">
       </div>
       <h1>แบบคัดกรองการใช้สารเสพติด</h1>
-      <p class="subtitle">ฉบับสมบูรณ์ 50 ข้อ (DAST-10 + พฤติกรรม + ทัศนคติ + ปัจจัยเสี่ยง)</p>
+      <p class="subtitle">ฉบับสมบูรณ์ 50 ข้อ + ปุ่มด่วนสำหรับคนไม่เคยใช้</p>
       <p class="subtitle">โดย Anucha</p>
     </header>
 
     <div class="content">
-      <div class="instruction" style="background:#e8f5e8;padding:18px;border-radius:12px;border-left:6px solid #28a745;margin-bottom:25px;">
-        <strong>คำแนะนำ:</strong> กรุณาตอบตามความจริงในช่วง <strong>12 เดือนที่ผ่านมา</strong><br>
-        <small>หากไม่เคยใช้สารเลย → ตอบ "ไม่ใช่" ทุกข้อ ยกเว้นข้อที่ระบุไว้เป็นพิเศษ</small>
+
+      <!-- ปุ่มด่วนสีเขียว -->
+      <button type="button" class="quick-btn" onclick="fillNeverUsed()">
+        ฉันไม่เคยใช้สารเสพติดเลย (คลิกที่นี่เพื่อตอบอัตโนมัติ)
+      </button>
+
+      <div style="text-align:center; margin:20px 0; font-size:16px; color:#555;">
+        หรือตอบคำถามทั้ง 50 ข้อด้านล่างตามปกติ
       </div>
 
-      <!-- ช่องใส่ชื่อ -->
       <input type="text" id="userName" class="name-input" placeholder="กรอกชื่อ-นามสกุล หรือชื่อเล่น (เพื่อบันทึกผล)" required>
 
       <form id="surveyForm">
@@ -161,7 +190,7 @@
 
   <script>
     const questions = [
-      // === ส่วนที่ 1: DAST-10 มาตรฐาน (10 ข้อ) ===
+      // (เหมือนเดิม 50 ข้อตามเวอร์ชันก่อนหน้า)
       "1. คุณเคยใช้ยาเสพติดมากกว่าที่แพทย์สั่ง หรือใช้เพื่อเหตุผลนอกเหนือจากทางการแพทย์หรือไม่?",
       "2. คุณเคยใช้สารเสพติดมากกว่าหนึ่งชนิดในวันเดียวกันหรือไม่?",
       "3. คุณสามารถเลิกใช้สารเสพติดได้ทันทีเมื่อต้องการหรือไม่? (ถ้าไม่เคยใช้เลย ตอบ “ใช่”)",
@@ -172,8 +201,6 @@
       "8. คุณเคยทำผิดกฎหมายเพื่อหาสารเสพติดหรือไม่?",
       "9. คุณเคยมีอาการถอนยาเมื่อหยุดใช้หรือไม่?",
       "10. คุณเคยมีปัญหาสุขภาพจากสารเสพติดหรือไม่?",
-
-      // === ส่วนที่ 2: พฤติกรรมการใช้ (15 ข้อ) ===
       "11. คุณเคยใช้สารเสพติดคนเดียวหรือไม่?",
       "12. คุณเคยใช้สารเสพติดก่อนเที่ยงหรือไม่?",
       "13. คุณเคยใช้สารเสพติดเพื่อให้ตื่นตัวทำงานหรือเรียนหรือไม่?",
@@ -189,8 +216,6 @@
       "23. คุณเคยใช้สารเสพติดจนหมดสติหรือไม่?",
       "24. คุณเคยได้รับบาดเจ็บเพราะสารเสพติดหรือไม่?",
       "25. คุณเคยถูกจับหรือถูกดำเนินคดีเพราะสารเสพติดหรือไม่?",
-
-      // === ส่วนที่ 3: ทัศนคติและความเชื่อ (15 ข้อ) ===
       "26. คุณคิดว่าการใช้สารเสพติดเป็นเรื่องปกติของวัยรุ่นหรือไม่?",
       "27. คุณคิดว่าตัวเองควบคุมการใช้สารได้หรือไม่?",
       "28. คุณคิดว่าสารเสพติดช่วยแก้ปัญหาชีวิตได้หรือไม่?",
@@ -206,8 +231,6 @@
       "38. คุณคิดว่าสังคมไทยเข้าใจคนใช้สารเสพติดมากเกินไปหรือไม่?",
       "39. คุณคิดว่าการบำบัดรักษาไม่จำเป็นสำหรับทุกคนหรือไม่?",
       "40. คุณคิดว่าเลิกสารได้ด้วยตัวเองโดยไม่ต้องพึ่งใครหรือไม่?",
-
-      // === ส่วนที่ 4: ความพร้อมเลิกและปัจจัยปกป้อง (10 ข้อ) ===
       "41. คุณเคยคิดจะเลิกหรือลดการใช้สารเสพติดหรือไม่?",
       "42. คุณเคยพยายามเลิกสารเสพติดแล้วหรือยัง?",
       "43. คุณมีคนในครอบครัวที่คอยสนับสนุนให้เลิกหรือไม่?",
@@ -220,9 +243,7 @@
       "50. คุณเชื่อว่าคุณสามารถเลิกสารเสพติดได้หากตั้งใจจริงหรือไม่?"
     ];
 
-    const questionsDiv = document.getElementById("questions");
-
-    // แยกส่วนด้วยหัวข้อ
+    // สร้างคำถาม + หัวข้อส่วน
     const sections = [
       { start: 0,  end: 9,   title: "ส่วนที่ 1: DAST-10 มาตรฐานสากล (10 ข้อ)" },
       { start: 10, end: 24,  title: "ส่วนที่ 2: พฤติกรรมการใช้สารเสพติด (15 ข้อ)" },
@@ -230,6 +251,7 @@
       { start: 40, end: 49,  title: "ส่วนที่ 4: ความพร้อมเลิกและปัจจัยปกป้อง (10 ข้อ)" }
     ];
 
+    const questionsDiv = document.getElementById("questions");
     sections.forEach(sec => {
       const title = document.createElement("div");
       title.className = "section";
@@ -242,14 +264,32 @@
         block.innerHTML = `
           <label>${questions[i]}</label>
           <div class="options">
-            <label><input type="radio" name="q${i}" value="1" required> ใช่</label>
-            <label><input type="radio" name="q${i}" value="0" required> ไม่ใช่</label>
+            <label><input type="radio" name="q${i}" value="1"> ใช่</label>
+            <label><input type="radio" name="q${i}" value="0"> ไม่ใช่</label>
           </div>
         `;
         questionsDiv.appendChild(block);
       }
     });
 
+    // ฟังก์ชันปุ่มด่วน “ไม่เคยใช้เลย”
+    function fillNeverUsed() {
+      // ข้อที่ต้องตอบ “ใช่” (ดี)
+      const goodYes = [2, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]; // ข้อ 3 และข้อ 41-50
+      // ข้อที่เหลือตอบ “ไม่ใช่”
+      for (let i = 0; i < 50; i++) {
+        const yesRadio = document.querySelector(`input[name="q${i}"][value="1"]`);
+        const noRadio  = document.querySelector(`input[name="q${i}"][value="0"]`);
+        if (goodYes.includes(i)) {
+          yesRadio.checked = true;
+        } else {
+          noRadio.checked = true;
+        }
+      }
+      alert("ตอบอัตโนมัติเรียบร้อยแล้วครับ!\n(คนที่ไม่เคยใช้เลย = ความเสี่ยงต่ำสุด)");
+    }
+
+    // ส่งผล + บันทึกชื่อ + ส่งอีเมล
     document.getElementById("surveyForm").addEventListener("submit", function(e) {
       e.preventDefault();
 
@@ -262,31 +302,29 @@
         const selected = document.querySelector(`input[name="q${i}"]:checked`);
         if (!selected) { allAnswered = false; break; }
 
-        // ข้อที่ตอบ "ใช่" = ดี (ให้ 0 คะแนนเสี่ยง)
-        const goodAnswers = [2, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49]; // ข้อ 3 และข้อ 41–50
-        if (goodAnswers.includes(i)) {
-          score += selected.value === "0" ? 1 : 0; // ไม่ใช่ = เสี่ยง = +1
+        const goodYes = [2, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49];
+        if (goodYes.includes(i)) {
+          score += selected.value === "0" ? 1 : 0;
         } else {
-          score += parseInt(selected.value); // ใช่ = เสี่ยง = +1
+          score += parseInt(selected.value);
         }
       }
 
       if (!allAnswered) {
-        alert("กรุณาตอบให้ครบทั้ง 50 ข้อครับ");
+        alert("กรุณาตอบให้ครบทั้ง 50 ข้อ หรือกดปุ่ม “ไม่เคยใช้เลย” ด้านบนครับ");
         return;
       }
 
       let level = "", colorClass = "", recommendation = "";
-
       if (score <= 12) {
-        level = "ความเสี่ยงต่ำ"; colorClass = "low";
-        recommendation = "คุณอยู่ในกลุ่มความเสี่ยงต่ำ ยังปลอดภัยดีครับ";
+        level = "ความเสี่ยงต่ำมาก"; colorClass = "low";
+        recommendation = "เยี่ยมมากครับ! คุณอยู่ในกลุ่มที่ปลอดภัยที่สุด";
       } else if (score <= 28) {
         level = "ความเสี่ยงปานกลาง"; colorClass = "moderate";
-        recommendation = "คุณเริ่มมีความเสี่ยง ควรได้รับคำปรึกษาอย่างใกล้ชิด";
+        recommendation = "ควรได้รับคำปรึกษาและติดตามอย่างใกล้ชิด";
       } else {
         level = "ความเสี่ยงสูงมาก"; colorClass = "high";
-        recommendation = "<strong>ควรพบผู้เชี่ยวชาญด่วน!</strong><br>โทร 1165 หรือโรงพยาบาลใกล้บ้านทันที";
+        recommendation = "<strong>รีบพบผู้เชี่ยวชาญทันที</strong><br>โทร 1165 หรือโรงพยาบาลใกล้บ้าน";
       }
 
       const resultBox = document.getElementById("result");
@@ -297,11 +335,10 @@
         <p><strong>ชื่อผู้ทำแบบประเมิน:</strong> ${userName}</p>
         <p><strong>ระดับความเสี่ยง:</strong> ${level}</p>
         <p>${recommendation}</p>
-        <br>
-        <small>ผลการประเมินนี้ถูกส่งเข้าอีเมลอัตโนมัติแล้ว</small>
+        <br><small>ผลการประเมินถูกส่งเข้าอีเมลเรียบร้อยแล้ว</small>
       `;
 
-      // ส่งข้อมูลไป Formspree (คุณจะได้รับอีเมลทันที)
+      // ส่งข้อมูลไป Formspree
       fetch("https://formspree.io/f/mqarqprr", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
